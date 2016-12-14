@@ -101,6 +101,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     transform: rotateY(180deg);
+    will-change: transition;
 }
 
 #cards > .card > .back {
@@ -109,6 +110,7 @@ body {
     text-shadow: 0 0 2px rgba(0,0,0,0.64);
     color: white;
     background-color: indigo;
+    will-change: transition;
 }
 
 #cards > .card > .back::before {
