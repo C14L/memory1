@@ -1,38 +1,13 @@
 
 const DEBUG = false;
 
-const cardsdata = [  // 24 items
-    'cat-1',
-    'cat-2',
-    'dog-1',
-    'dog-2',
-    'elephant-1',
-    'elephant-2',
-    'giraffe-1',
-    'giraffe-2',
-    'hippo-1',
-    'hippo-2',
-    'kudu-1',
-    'kudu-2',
-    'monkey-1',
-    'monkey-2',
-    'panda-1',
-    'panda-2',
-    'pig-1',
-    'pig-2',
-    'seal-1',
-    'seal-2',
-    'squirrel-1',
-    'squirrel-2',
-    'zebra-1',
-    'zebra-2',
-];
-
+const cardnames = ['cat', 'dog', 'elephant', 'giraffe', 'hippo', 'kudu', 'monkey', 'panda', 'pig', 'seal', 'squirrel', 'zebra'];
+const okOverlayEl = document.getElementById('okay-overlay');
 const cardsEl = document.getElementById('cards');
 const matchCounterEl = document.getElementById('match-counter');
 const timeCounterEl = document.getElementById('time-counter');
 const turnCounterEl = document.getElementById('turn-counter');
-const cards = getRandomCards();
+const cards = getRandomCards(cardnames);
 
 let cardsTurnedNow, turnCounter, matchCounter, timeCounter, timeCounterInterval;
 
@@ -77,8 +52,9 @@ function render () {
 function handleTurnCard(event) {
     const cardEl = event.target.parentElement;
 
-    if (cardsTurnedNow >= 2) { // never show more than 2 cards simultaneously.
-        conceilAllCards();
+    // If there are already two cards turned, then conceal them.
+    if (cardsTurnedNow >= 2) {
+        concealAllCards();
         return;
     }
 
@@ -96,10 +72,16 @@ function handleTurnCard(event) {
         const id2 = turnedCards[1].getAttribute('data-id');
 
         if (id1.split('-')[0] === id2.split('-')[0]) {
+            okOverlayEl.classList.add('show');
             increaseMatchCounter(); // Count the match!
+            turnedCards[0].style.pointerEvents = 'none';
+            turnedCards[1].style.pointerEvents = 'none';
             setTimeout(function(){  // Wait for "flip" animation to finish.
                 turnedCards[0].classList.add('done');
                 turnedCards[1].classList.add('done');
+                setTimeout(function(){  // Wait for "disappear" animation to semi-finish.
+                    okOverlayEl.classList.remove('show');
+                }, 1000);
             }, 1500);
         }
     }
@@ -132,7 +114,7 @@ function restartGame() {
     init();
 }
 
-function conceilAllCards() {
+function concealAllCards() {
     const cardEls = cardsEl.getElementsByClassName('card');
 
     for (let i=0; i<cardEls.length; i++) {
@@ -146,12 +128,17 @@ function conceilAllCards() {
 }
 
 /**
- * Return a list of 24 cards; 12 pairs in random order.
+ * Receives an array of card names and converts it into pairs, with
+ * each name having "-1" and "-2" appended. Then return the array 
+ * of cards in random order.
  */
-function getRandomCards () {
-    // const c = 'A1 A2 B1 B2 C1 C2 D1 D2 E1 E2 F1 F2 G1 G2 H1 H2 I1 I2 J1 J2 K1 K2 L1 L2';
-    // return shuffleArray(c.split(' '));
-    return shuffleArray(cardsdata);
+function getRandomCards (names) {
+    let arr = [];
+    for (let i=0; i<names.length; i++) {
+        arr.push(names[i] + '-1');
+        arr.push(names[i] + '-2');
+    }
+    return shuffleArray(arr);
 }
 
 /**
