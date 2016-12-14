@@ -6,10 +6,40 @@ body {
     margin: 0;
     padding: 0;
     background-color: #F3F3F3;
-    --card-width: 200px;
-    --card-gap: 15px;
-    --cards-per-row: 6;
+    --card-width: calc((100vw / 4) - 8px);
+    --card-gap: 5px;
+    --cards-per-row: 4;
     --flip-card-speed: 0.8s;
+    --card-border: 5px;
+    --header-font-size: 16px;
+}
+
+@media only screen and (min-width: 768px) {
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #F3F3F3;
+        --card-width: calc((100vw / 6) - 12px);
+        --card-gap: 10px;
+        --cards-per-row: 6;
+        --flip-card-speed: 0.8s;
+        --card-border: 7px;
+        --header-font-size: 24px;
+    }
+}
+
+@media only screen and (min-width: 1300px) {
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #F3F3F3;
+        --card-width: 200px;
+        --card-gap: 15px;
+        --cards-per-row: 6;
+        --flip-card-speed: 0.8s;
+        --card-border: 10px;
+        --header-font-size: 32px;
+    }
 }
 
 #okay-overlay {
@@ -61,7 +91,7 @@ body {
     height: inherit;
     line-height: var(--card-width);
     box-shadow: 0 0 2px rgba(0,0,0,0.48);
-    border: 10px solid white;
+    border: var(--card-border) solid white;
     position: absolute; top: 0; right: 0; bottom: 0; left: 0;
 }
 
@@ -123,7 +153,7 @@ body {
 
 header {
     font-family: 'Indie Flower', cursive;
-    font-size: 32px;
+    font-size: var(--header-font-size);
     padding: 0px;
     text-align: center;
 }
