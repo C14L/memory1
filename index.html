@@ -39,10 +39,11 @@
         <meta property="og:site_name" content="">
     </head>
     <body lang="en">
+        <div id="bg"></div>
         <header>
-            <span class="counter" id="turn-counter">0</span> turned pairs with
-            <span class="counter" id="match-counter">0</span> matches in
-            <span class="counter" id="time-counter">0</span> seconds.
+            <span class="part"><span class="counter" id="turn-counter">0</span> turns</span>
+            <span class="part"><span class="counter" id="match-counter">0</span> matches</span>
+            <span class="part"><span class="counter" id="time-counter">0</span> seconds</span>
         </header>
         <main>
             <div id="cards"></div>
@@ -54,6 +55,7 @@
         <div id="okay-overlay">
             <div></div>
         </div>
+        <div id="toast"></div>
     </body>
     <script src="main.js"></script>
 </html>

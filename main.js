@@ -1,6 +1,39 @@
-(function(){ 'use strict';
-
+(function(){ 
+    'use strict';
     const DEBUG = false;
+
+    /**
+     * Display a toast for "duration" seconds, or if none,
+     * until the user clicks the toast element.
+     */
+    function toast(msg, duration){
+        const tEl = document.getElementById('toast');
+        tEl.appendChild(document.createTextNode(msg));
+        setTimeout(function() { tEl.classList.add('show'); }, 1000);
+        setTimeout(function() { tEl.classList.remove('show'); }, 5000);
+    }
+
+    // Service Worker /////////////////
+
+    if (navigator.serviceWorker) {
+        console.log('navigator.serviceWorker exists.');
+
+        navigator.serviceWorker.register('/memory/sw.js', {scope: '/memory/'}).then(function(reg){
+            console.log('Service Worker .... registered:', reg);
+
+            reg.addEventListener('statechange', function(event) {
+                toast('Service Worker update ready to install.', event);
+
+            });
+        });
+
+        navigator.serviceWorker.addEventListener('controllerchange', function(event){
+            toast('Service Worker controller updated. Reloading page...');
+            location.reload();
+        });
+    }
+
+    // Cards //////////////////////////
 
     const cardnames = ['cat', 'dog', 'elephant', 'giraffe', 'hippo', 'kudu', 'monkey', 'panda', 'pig', 'seal', 'squirrel', 'zebra'];
     const okOverlayEl = document.getElementById('okay-overlay');
@@ -19,7 +52,6 @@
         matchCounter = 0; // How many matching pair were found so far?
         turnCounter = 0;  // How many card pairs were turned?
         resetTimeCounter();
-        startTimeCounter();
         render();
     }
 
@@ -33,7 +65,7 @@
 
             divCard.setAttribute('data-id', cards[i]); // Set card id on the element.
             divCard.classList.add('card');
-            divFront.style.backgroundImage = 'url(' + cards[i] + '.jpg)';
+            divFront.style.backgroundImage = 'url(pics/' + cards[i] + '.jpg)';
             divFront.classList.add('front');
             divBack.classList.add('back');
 
@@ -53,38 +85,46 @@
     function handleTurnCard(event) {
         const cardEl = event.target.parentElement;
 
-        // If there are already two cards turned, then conceal them.
+        // If this is the first card turned in this game, start timer.
+        if (cardsTurnedNow == 0 && turnCounter == 0) {
+            startTimeCounter();
+        }
+        // If there are already two cards turned, then conceal both.
         if (cardsTurnedNow >= 2) {
             concealAllCards();
             return;
         }
-
+        // If front isn't visible, then turn card to see front pic.
         if ( ! cardEl.classList.contains('front-visible')) {
             cardEl.classList.remove('front-concealed');
             cardEl.classList.add('front-visible');
             cardsTurnedNow++;
         }
-
         // Check if there is a matching pair of cards.
         if (cardsTurnedNow == 2) {
-            increaseTurnCounter(); // Count the turned pair.
-            const turnedCards = cardsEl.getElementsByClassName('front-visible');
-            const id1 = turnedCards[0].getAttribute('data-id');
-            const id2 = turnedCards[1].getAttribute('data-id');
+            checkIfPairMatches();
+        }
+    }
 
-            if (id1.split('-')[0] === id2.split('-')[0]) {
-                okOverlayEl.classList.add('show');
-                increaseMatchCounter(); // Count the match!
-                turnedCards[0].style.pointerEvents = 'none';
-                turnedCards[1].style.pointerEvents = 'none';
-                setTimeout(function(){  // Wait for "flip" animation to finish.
-                    turnedCards[0].classList.add('done');
-                    turnedCards[1].classList.add('done');
-                    setTimeout(function(){  // Wait for "disappear" animation to semi-finish.
-                        okOverlayEl.classList.remove('show');
-                    }, 1000);
-                }, 1500);
-            }
+    function checkIfPairMatches() {
+        const turnedCards = cardsEl.getElementsByClassName('front-visible');
+        const id1 = turnedCards[0].getAttribute('data-id');
+        const id2 = turnedCards[1].getAttribute('data-id');
+
+        increaseTurnCounter(); // Count the turned pair.
+        
+        if (id1.split('-')[0] === id2.split('-')[0]) {
+            okOverlayEl.classList.add('show');
+            increaseMatchCounter(); // Count the match!
+            turnedCards[0].style.pointerEvents = 'none';
+            turnedCards[1].style.pointerEvents = 'none';
+            setTimeout(function(){  // Wait for "flip" animation to finish.
+                turnedCards[0].classList.add('done');
+                turnedCards[1].classList.add('done');
+                setTimeout(function(){  // Wait for "disappear" animation to semi-finish.
+                    okOverlayEl.classList.remove('show');
+                }, 1000);
+            }, 1500);
         }
     }
 

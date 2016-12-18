@@ -5,13 +5,27 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #F3F3F3;
+    background-color: white;
     --card-width: calc((100vw / 4) - 8px);
     --card-gap: 5px;
     --cards-per-row: 4;
     --flip-card-speed: 0.8s;
     --card-border: 5px;
     --header-font-size: 16px;
+}
+
+#bg::before {
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    content: '';
+    opacity: 0.20;
+    background-image: repeating-linear-gradient(25deg, green, blue, yellow, white, red, indigo, black);
+}
+
+#bg::after {
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    content: '';
+    opacity: 0.25;
+    background-image: repeating-linear-gradient(105deg, green, blue, yellow, white, red, indigo, black);
 }
 
 @media only screen and (min-width: 768px) {
@@ -40,6 +54,22 @@ body {
         --card-border: 10px;
         --header-font-size: 32px;
     }
+}
+
+#toast {
+    background-color: rgba(0,0,0,0.72);
+    position: fixed; bottom: -60px; left: 10px;
+    color: white;
+    padding: 20px 30px;
+    font-family: sans-serif;
+    font-size: 1.15;
+    letter-spacing: 1px;
+    transition: 0.5s ease-in;
+}
+
+#toast.show {
+    bottom: 20px; left: 10px;
+    transition: 0.5s ease-out;
 }
 
 #okay-overlay {
@@ -101,7 +131,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     transform: rotateY(180deg);
-    will-change: transition;
+    will-change: transform;
 }
 
 #cards > .card > .back {
@@ -110,7 +140,7 @@ body {
     text-shadow: 0 0 2px rgba(0,0,0,0.64);
     color: white;
     background-color: indigo;
-    will-change: transition;
+    will-change: transform;
 }
 
 #cards > .card > .back::before {
@@ -156,37 +186,21 @@ body {
 header {
     font-family: 'Indie Flower', cursive;
     font-size: var(--header-font-size);
-    padding: 0px;
     text-align: center;
-}
-
-header .counter {
-    background-color: indigo;    
-    border: 5px solid white; 
-    border-top: 0;
-    border-radius: 0 0 5px 5px;
-    box-shadow: 0 0 2px rgba(0,0,0,0.48);
+    background-color: rgba(0,0,0,0.82);
     color: white;
-    display: inline-block;
-    font-weight: bold;
-    padding: 0;
-    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+header .part {
+    flex: 0 0 33%;
+    line-height: calc(var(--header-font-size) + 20px);
     text-align: center;
-    width: 100px;
 }
 
-header .counter::before {
-    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-    content: '';
-    opacity: 0.20;
-    background-image: repeating-linear-gradient(25deg, green, blue, yellow, white, red, indigo, black);
-}
-
-header .counter::after {
-    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-    content: '';
-    opacity: 0.25;
-    background-image: repeating-linear-gradient(105deg, green, blue, yellow, white, red, indigo, black);
+header .part + .part {
+    border-left: 1px solid rgba(255,255,255,0.24);
 }
 
 footer {
@@ -231,4 +245,15 @@ footer a {
 @keyframes spin-to-disappear {
     0%   { }
     100% { transform: rotate(calc(15 * 360deg)) scale(0.2); opacity: 0; }
+}
+
+
+@media only screen and (max-width: 767px) {
+    footer {
+        display: none;
+    }
+    header {
+        padding: 0;
+        position: fixed; right: 0; bottom: 0; left: 0;
+    }
 }
