@@ -31,7 +31,7 @@
     if (navigator.serviceWorker) {
         console.log('navigator.serviceWorker exists.');
 
-        navigator.serviceWorker.register('/memory/sw.js', {scope: '/memory/'}).then(function(reg){
+        navigator.serviceWorker.register('/memory/1/sw.js', {scope: '/memory/1/'}).then(function(reg){
             console.log('Service Worker .... registered:', reg);
 
             reg.addEventListener('statechange', function(event) {
