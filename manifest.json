@@ -1,5 +1,5 @@
 {
-  "short_name": "Memory App",
+  "short_name": "Memory1",
   "name": "Memory Game App",
   "icons": [
     {
@@ -18,7 +18,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/memory/index.html",
+  "start_url": "/memory/",
   "display": "standalone",
   "orientation": "portrait"
 }

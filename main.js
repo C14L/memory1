@@ -3,6 +3,19 @@
     const DEBUG = false;
 
     /**
+     * Install ServiceWorker.
+     */
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js', {scope: './'}).then(function(reg) {
+            console.log('main.js --> ServiceWorker was installed:', reg);
+        }).catch(function(err) {
+            console.error('main.js --> ServiceWorker installation error:', err);
+        });
+    } else {
+        console.log('main.js --> Browser does not support ServiceWorker.');
+    }
+
+    /**
      * Display a toast for "duration" seconds, or if none,
      * until the user clicks the toast element.
      */
