@@ -131,7 +131,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     transform: rotateY(180deg);
-    will-change: transform;
+    will-change: rotateY, scale;
 }
 
 #cards > .card > .back {
@@ -140,7 +140,7 @@ body {
     text-shadow: 0 0 2px rgba(0,0,0,0.64);
     color: white;
     background-color: indigo;
-    will-change: transform;
+    will-change: rotateY, scale;
 }
 
 #cards > .card > .back::before {
@@ -161,6 +161,11 @@ body {
     animation: spin-to-disappear 2s ease-in;
     animation-fill-mode: forwards;
     pointer-events: none;
+}
+
+#cards > .card.done > .front,
+#cards > .card.done > .back {
+    will-change: auto;
 }
 
 #cards > .card.front-concealed > .front {
