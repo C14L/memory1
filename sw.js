@@ -1,5 +1,5 @@
 
-const SW_VERSION = '1.10';
+const SW_VERSION = '1.11';
 const SW_ACTIVE = true;
 const SW_LOG_PREFIX = 'SW' + SW_VERSION + ' --> ';
 const SW_CACHE = 'memory' + SW_VERSION;
@@ -16,7 +16,7 @@ const FILES = [
         BASEPATH + 'launcher-icon-4x.png',
         BASEPATH + 'main.css',
         BASEPATH + 'main.js',
-        BASEPATH + 'manifest.json',
+        // BASEPATH + 'manifest.json',
     ].concat(toFileNames(ITEMSTRING));
 
 if (SW_ACTIVE) {
@@ -31,7 +31,7 @@ if (SW_ACTIVE) {
     });
 
     self.addEventListener('fetch', event => {
-        event.respondWith(caches.match(event.request));
+        event.respondWith(caches.match(event.request) || fetch(event.request));
     });
 
 } else {
