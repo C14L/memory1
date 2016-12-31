@@ -1,13 +1,14 @@
 
-const SW_VERSION = '1.11';
+const SW_VERSION = '1.12';
+const SW_MV = SW_VERSION.split('.')[0]; // major version number
 const SW_ACTIVE = true;
 const SW_LOG_PREFIX = 'SW' + SW_VERSION + ' --> ';
-const SW_CACHE = 'memory' + SW_VERSION;
+const SW_CACHE = 'memory' + SW_MV;
 
-const BASEPATH = '/memory/1/';
+const BASEPATH = '/memory/' + SW_MV + '/';
 const ITEMSTRING = 'cat dog elephant giraffe hippo kudu monkey panda pig seal squirrel zebra';
-const FILES = [
-        BASEPATH + 'favicon.ico',
+const FILES = toFileNames(ITEMSTRING).concat([
+        BASEPATH + '../favicon.ico',
         BASEPATH,
         BASEPATH + 'index.html',
         BASEPATH + 'launcher-icon.png',
@@ -16,14 +17,14 @@ const FILES = [
         BASEPATH + 'launcher-icon-4x.png',
         BASEPATH + 'main.css',
         BASEPATH + 'main.js',
-        // BASEPATH + 'manifest.json',
-    ].concat(toFileNames(ITEMSTRING));
+    ]);
 
 if (SW_ACTIVE) {
     console.log(SW_LOG_PREFIX + 'Active service worker.');
 
     self.addEventListener('install', event => {
         event.waitUntil(caches.open(SW_CACHE).then(cache => cache.addAll(FILES)));
+        self.skipWaiting();
     });
 
     self.addEventListener('activate', event => {
